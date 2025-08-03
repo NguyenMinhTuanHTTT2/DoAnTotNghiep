@@ -1,0 +1,47 @@
+# ===== Visual Studio =====
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# ===== Build results =====
+**/bin/
+**/obj/
+*.exe
+*.dll
+*.pdb
+
+# ===== NuGet packages =====
+packages/
+*.nupkg
+*.snupkg
+
+# ===== Logs and Cache =====
+*.log
+*.cache
+*.tmp
+
+# ===== Database generated files =====
+*.dbmdl
+*.mdf
+*.ldf
+
+# ===== Word temporary files =====
+~$*.docx
+
+# ===== OS-specific =====
+.DS_Store
+Thumbs.db
+
+# ===== Others (optional) =====
+*.bak
+*.zip
+*.rar
+
+# ===== Optional: ignore appsettings if sensitive =====
+**/appsettings.*.json
+
+# ===== EXCEPTIONS - keep these files =====
+!CSDL.sql
+!Báo cáo đồ án.docx
