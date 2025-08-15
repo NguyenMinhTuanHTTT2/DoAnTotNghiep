@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SmartBookStore.Data\SmartBookStore.Data.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,4 @@
+use SmartBookStoreDb
+
+
+select * from

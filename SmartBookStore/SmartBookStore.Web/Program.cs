@@ -1,4 +1,11 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SmartBookStore.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//Đăng ký Đăng ký DbContext
+builder.Services.AddDbContext<SmartBookStoreDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

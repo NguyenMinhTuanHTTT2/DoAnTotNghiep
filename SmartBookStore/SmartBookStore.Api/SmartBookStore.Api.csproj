@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartBookStore.Core\SmartBookStore.Core.csproj" />
-    <ProjectReference Include="..\SmartBookStore.Data\SmartBookStore.Data.csproj" />
   </ItemGroup>
 
 </Project>
