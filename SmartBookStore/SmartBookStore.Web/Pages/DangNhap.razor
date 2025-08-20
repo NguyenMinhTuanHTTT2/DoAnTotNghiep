@@ -1,0 +1,52 @@
+﻿@page "/dangnhap"
+@inject AuthService Auth
+@inject NavigationManager Navigation
+@using SmartBookStore.Data
+@using Microsoft.EntityFrameworkCore
+@inject SmartBookStoreDbContext Db
+@layout MainLayout
+
+<div class="auth-page">
+    <div class="auth-card">
+        <h3>Đăng nhập</h3>
+
+        <input placeholder="Email" class="form-control" @bind="email" />
+        <input type="password" placeholder="Mật khẩu" class="form-control" @bind="password" />
+
+        <button class="btn btn-primary mt-2" @onclick="Login">Đăng nhập</button>
+
+        <p class="mt-2 text-center">
+            Chưa có tài khoản? <a href="/dangky">Đăng ký ngay</a>
+        </p>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <p class="text-danger">@message</p>
+        }
+    </div>
+</div>
+
+@code {
+    private string email = "";
+    private string password = "";
+    private string message = "";
+
+    private async Task Login()
+    {
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+        {
+            message = "Nhập email và mật khẩu!";
+            return;
+        }
+
+        var user = await Db.NguoiDungs.FirstOrDefaultAsync(u => u.Email == email && u.MatKhau == password);
+        if (user == null) { message = "Sai email hoặc mật khẩu!"; return; }
+
+        await Auth.DangNhap(user.Email, user.HoTen, user.MaVaiTro);
+
+        if (user.MaVaiTro == 1)
+            Navigation.NavigateTo("/admin/dashboard");
+        else
+            Navigation.NavigateTo("/customer/trangchu");
+    }
+}

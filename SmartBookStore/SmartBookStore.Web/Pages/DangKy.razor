@@ -1,0 +1,64 @@
+﻿@page "/dangky"
+@using SmartBookStore.Data
+@using SmartBookStore.Data.Model_Data.DT_NguoiDung
+@inject SmartBookStoreDbContext Db
+@inject NavigationManager Navigation
+@using Microsoft.EntityFrameworkCore
+@layout MainLayout
+
+<div class="auth-page">
+    <div class="auth-card">
+        <h3>Đăng ký tài khoản</h3>
+
+        <input type="text" class="form-control" @bind="hoten" placeholder="Họ và tên" />
+        <input type="text" class="form-control" @bind="email" placeholder="Email" />
+        <input type="password" class="form-control" @bind="password" placeholder="Mật khẩu" />
+
+        <button class="btn btn-success mt-2" @onclick="Register">Đăng ký</button>
+
+        <p class="mt-2 text-center">
+            Đã có tài khoản? <a href="/dangnhap">Đăng nhập</a>
+        </p>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <p class="text-danger">@message</p>
+        }
+    </div>
+</div>
+
+@code {
+    private string hoten = "";
+    private string email = "";
+    private string password = "";
+    private string message = "";
+
+    private async Task Register()
+    {
+        if (string.IsNullOrWhiteSpace(hoten) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+        {
+            message = "Vui lòng nhập đầy đủ thông tin.";
+            return;
+        }
+
+        var exists = await Db.NguoiDungs.AnyAsync(u => u.Email.ToLower() == email.ToLower());
+        if (exists)
+        {
+            message = "Email đã tồn tại!";
+            return;
+        }
+
+        var user = new NguoiDung
+            {
+                HoTen = hoten,
+                Email = email,
+                MatKhau = password,
+                MaVaiTro = 2
+            };
+
+        Db.NguoiDungs.Add(user);
+        await Db.SaveChangesAsync();
+
+        Navigation.NavigateTo("/dangnhap", true);
+    }
+}

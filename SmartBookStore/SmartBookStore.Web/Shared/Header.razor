@@ -1,0 +1,162 @@
+﻿@inject AuthService Auth
+@inject NavigationManager Navigation
+
+<header class="site-header">
+    <div class="topbar">
+        <div class="brand"><span class="brand-text">SmartBookStore</span></div>
+        <div class="search"><input type="text" placeholder="Tìm kiếm sách..." /></div>
+
+        <div class="auth">
+            @if (Auth.DaDangNhap)
+            {
+                <div class="userbox">
+                    <span class="name">@Auth.GetCurrent()?.HoTen <span class="arrow">&#9662;</span></span>
+                    <div class="dropdown">
+                        <button class="dropdown-item" @onclick="DangXuat">Đăng xuất</button>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a href="/dangnhap">Đăng nhập</a>
+            }
+        </div>
+    </div>
+
+    <nav class="site-nav">
+        <a href="@((Auth.DaDangNhap) ? "/customer/trangchu" : "/home")">Trang chủ</a>
+        <a href="/books">Danh mục</a>
+        <a href="/khuyenmai">Khuyến mãi</a>
+        <a href="/gioithieu">Giới thiệu</a>
+    </nav>
+
+    @code {
+        protected override void OnInitialized()
+        {
+            Auth.OnChange += StateHasChanged;
+        }
+
+        private async Task DangXuat()
+        {
+            await Auth.DangXuat();
+            Navigation.NavigateTo("/home", forceLoad: true);
+        }
+    }
+</header>
+
+<style>
+    .site-header {
+        background: #fff;
+        border-bottom: 1px solid #eee;
+    }
+
+    .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 20px;
+    }
+
+    .brand-text {
+        font-weight: 700;
+        font-size: 20px;
+        color: #111;
+    }
+
+    .search {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+        .search input {
+            width: 100%;
+            max-width: 520px;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+        }
+
+    .auth a {
+        text-decoration: none;
+        color: #111;
+        font-weight: 600;
+    }
+
+        .auth a:hover {
+            color: #0d6efd;
+        }
+
+    .userbox {
+        position: relative; /* tạo context cho dropdown */
+        display: inline-block;
+        cursor: pointer;
+        font-weight: 600;
+        z-index: 1000; /* cao hơn site-nav */
+    }
+
+        .userbox .arrow {
+            margin-left: 4px;
+            font-size: 0.8em;
+        }
+
+        .userbox .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%; /* nằm dưới userbox */
+            right: 0;
+            background-color: #fff;
+            min-width: 140px; /* tăng một chút cho dễ click */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1100; /* cao hơn site-nav */
+        }
+
+        .userbox:hover .dropdown {
+            display: block;
+        }
+
+        /* đảm bảo vùng hover đủ lớn */
+        .userbox .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            text-decoration: none;
+            color: #111;
+            cursor: pointer;
+        }
+
+            .userbox .dropdown-item:hover {
+                background-color: #f2f2f2;
+            }
+
+    /* optional: tránh bị cắt nếu parent có overflow */
+    .topbar {
+        overflow: visible;
+    }
+
+    .site-nav {
+        display: flex;
+        justify-content: center;
+        gap: 36px;
+        padding: 10px 0;
+        border-top: 1px solid #f2f2f2;
+        background: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+
+        .site-nav a {
+            text-decoration: none;
+            color: #222;
+            font-weight: 500;
+        }
+
+            .site-nav a:hover {
+                color: #0d6efd;
+            }
+</style>

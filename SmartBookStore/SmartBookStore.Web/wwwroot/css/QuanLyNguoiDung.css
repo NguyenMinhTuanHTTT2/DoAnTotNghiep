@@ -1,0 +1,107 @@
+﻿/* Toàn bộ trang */
+.admin-page {
+    padding: 25px;
+    background: linear-gradient(135deg, #f8fbff, #eef3f8);
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Tiêu đề */
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a237e;
+    margin-bottom: 20px;
+    border-left: 5px solid #3949ab;
+    padding-left: 12px;
+}
+
+/* Khung bảng */
+.table-wrapper {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow-x: auto;
+    padding: 15px;
+}
+
+/* Bảng */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .admin-table thead {
+        background: #3949ab;
+        color: white;
+    }
+
+        .admin-table thead th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+    .admin-table tbody td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333;
+    }
+
+    /* Hover hàng */
+    .admin-table tbody tr:hover {
+        background: #f4f6fd;
+        transition: 0.3s ease;
+    }
+
+/* Trạng thái */
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+    .status.active {
+        background: #59e964;
+        color: #2e7d32;
+    }
+
+    .status.locked {
+        background: #e9aeb7;
+        color: #c62828;
+    }
+
+/* Nút hành động */
+.btn-action {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+/* Nút khóa */
+.btn-lock {
+    background: #c62828;
+    color: #fff;
+}
+
+    .btn-lock:hover {
+        background: #b71c1c;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+/* Nút mở khóa */
+.btn-unlock {
+    background: #2e7d32;
+    color: #fff;
+}
+
+    .btn-unlock:hover {
+        background: #1b5e20;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }

@@ -1,0 +1,73 @@
+﻿@page "/admin/quanlysach"
+@using SmartBookStore.Data.Model_Data.DT_Sach
+@inject SmartBookStoreDbContext _db
+
+<link href="~/css/QuanLySach.css" rel="stylesheet" />
+
+<div class="admin-page">
+    <h3 class="page-title">Quản lý Sách</h3>
+
+    <button class="btn-primary" @onclick="ThemSach">+ Thêm Sách</button>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Tên sách</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (dsSach != null)
+            {
+                @foreach (var s in dsSach)
+                {
+                    <tr>
+                        <td>@s.MaSach</td>
+                        <td>@s.TenSach</td>
+                        <td>@s.Gia.ToString("N0") đ</td>
+                        <td>@s.SoLuongTon</td>
+                        <td>@(s.TrangThai ? "Còn bán" : "Ngừng bán")</td>
+                        <td>
+                            <button class="btn-action btn-warning" @onclick="() => SuaSach(s.MaSach)">Sửa</button>
+                            <button class="btn-action btn-danger" @onclick="() => XoaSach(s.MaSach)">Xóa</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<Sach> dsSach = new();
+
+    protected override void OnInitialized()
+    {
+        dsSach = _db.Sachs.ToList();
+    }
+
+    private void ThemSach()
+    {
+        // TODO
+    }
+
+    private void SuaSach(int ma)
+    {
+        // TODO
+    }
+
+    private void XoaSach(int ma)
+    {
+        var sach = _db.Sachs.FirstOrDefault(x => x.MaSach == ma);
+        if (sach != null)
+        {
+            _db.Sachs.Remove(sach);
+            _db.SaveChanges();
+            dsSach = _db.Sachs.ToList();
+        }
+    }
+}

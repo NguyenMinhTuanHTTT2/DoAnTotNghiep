@@ -1,0 +1,16 @@
+﻿@page "/customer/trangchu"
+@inject AuthService Auth
+@inject NavigationManager Navigation
+@layout CustomerLayout
+
+<h1>Chào mừng @Auth.GetCurrent()?.HoTen</h1>
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (!Auth.DaDangNhap || Auth.GetCurrent()?.VaiTro != 2)
+        {
+            Navigation.NavigateTo("/home");
+        }
+    }
+}

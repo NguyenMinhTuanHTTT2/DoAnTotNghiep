@@ -210,7 +210,7 @@ namespace SmartBookStore.Data
                 new NguoiDung
                 {
                     MaNguoiDung = 1,
-                    Ten = "Quản trị viên",
+                    HoTen = "nguyễn Minh Tuân",
                     Email = "admin0@gmail.com",
                     MatKhau = "123456",
                     MaVaiTro = 1
@@ -218,7 +218,7 @@ namespace SmartBookStore.Data
                 new NguoiDung
                 {
                     MaNguoiDung = 2,
-                    Ten = "Nguyễn Văn A",
+                    HoTen = "Nguyễn Văn A",
                     Email = "admin1@gmail.com",
                     MatKhau = "123456",
                     MaVaiTro = 2

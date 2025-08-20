@@ -14,7 +14,7 @@ namespace SmartBookStore.Data.Model_Data.DT_NguoiDung
 
         [Required]
         [MaxLength(100)]
-        public string Ten { get; set; } = string.Empty;
+        public string HoTen { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(100)]
@@ -26,7 +26,10 @@ namespace SmartBookStore.Data.Model_Data.DT_NguoiDung
 
         public int MaVaiTro { get; set; }
 
+
         public virtual VaiTro VaiTro { get; set; } = null!;
+        // Thêm trường trạng thái
+        public bool TrangThai { get; set; } = false; // false = hoạt động, true = bị khóa
 
         public virtual ICollection<DT_GioHang.GioHang> GioHangs { get; set; } = new List<DT_GioHang.GioHang>();
         public virtual ICollection<DT_DonHang.DonHang> DonHangs { get; set; } = new List<DT_DonHang.DonHang>();

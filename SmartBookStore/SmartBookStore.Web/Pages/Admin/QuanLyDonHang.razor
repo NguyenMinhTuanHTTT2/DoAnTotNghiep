@@ -1,0 +1,97 @@
+﻿@page "/admin/quanlydonhang"
+@using SmartBookStore.Data.Model_Data.DT_DonHang
+@inject SmartBookStoreDbContext _db
+
+<div class="admin-page">
+    <h3 class="page-title">Quản lý Đơn Hàng</h3>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Mã đơn</th>
+                <th>Người đặt</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (dsDonHang != null)
+            {
+                @foreach (var d in dsDonHang)
+                {
+                    <tr>
+                        <td>@d.MaDonHang</td>
+                        <td>@d.NguoiDung?.HoTen</td>
+                        <td>@d.NgayDat.ToString("dd/MM/yyyy")</td>
+                        <td>@d.TongTien.ToString("N0") đ</td>
+                        <td>
+                            <button class="btn-action btn-info" @onclick="() => XemChiTiet(d.MaDonHang)">Xem</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    @if (chiTietDonHang != null)
+    {
+        <div class="order-detail">
+            <h4>Chi tiết đơn hàng #@chiTietDonHang.MaDonHang</h4>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Sách</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ct in chiTietDonHang.ChiTietDonHangs)
+                    {
+                        <tr>
+                            <td>@ct.Sach?.TenSach</td>
+                            <td>@ct.SoLuong</td>
+                            <td>@ct.DonGia.ToString("N0") đ</td>
+                            <td>@((ct.SoLuong * ct.DonGia).ToString("N0")) đ</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    private List<DonHang> dsDonHang = new();
+    private DonHang? chiTietDonHang;
+
+    protected override void OnInitialized()
+    {
+        dsDonHang = _db.DonHangs
+            .Select(d => new DonHang
+                {
+                    MaDonHang = d.MaDonHang,
+                    NgayDat = d.NgayDat,
+                    TongTien = d.TongTien,
+                    NguoiDung = d.NguoiDung
+                })
+            .ToList();
+    }
+
+    private void XemChiTiet(int maDonHang)
+    {
+        chiTietDonHang = _db.DonHangs
+            .Where(d => d.MaDonHang == maDonHang)
+            .Select(d => new DonHang
+                {
+                    MaDonHang = d.MaDonHang,
+                    NgayDat = d.NgayDat,
+                    TongTien = d.TongTien,
+                    NguoiDung = d.NguoiDung,
+                    ChiTietDonHangs = d.ChiTietDonHangs
+                })
+            .FirstOrDefault();
+    }
+}

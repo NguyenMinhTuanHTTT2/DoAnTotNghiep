@@ -1,0 +1,74 @@
+﻿@page "/admin/quanlynguoidung"
+@inject SmartBookStoreDbContext Db
+@inject NavigationManager Nav
+@using SmartBookStore.Data.Model_Data.DT_NguoiDung
+@using SmartBookStore.Core
+@using Microsoft.EntityFrameworkCore
+
+<link href="css/QuanLyNguoiDung.css" rel="stylesheet" />
+
+<div class="admin-page">
+    <h3 class="page-title">Quản lý Người dùng</h3>
+
+    <div class="table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Vai trò</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in nguoiDungs)
+                {
+                    <tr>
+                        <td>@user.HoTen</td>
+                        <td>@user.Email</td>
+                        <td>@user.VaiTro.TenVaiTro</td>
+                        <td>
+                            <span class="status @(user.TrangThai ? "locked" : "active")">
+                                @(user.TrangThai ? "Bị khóa" : "Hoạt động")
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-action @(user.TrangThai ? "btn-unlock" : "btn-lock")"
+                                    @onclick="() => ToggleTrangThai(user)">
+                                @(user.TrangThai ? "Mở khóa" : "Khóa")
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<NguoiDung> nguoiDungs = new List<NguoiDung>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        nguoiDungs = await Db.NguoiDungs
+            .Include(u => u.VaiTro)
+            .ToListAsync();
+    }
+
+    private async Task ToggleTrangThai(NguoiDung user)
+    {
+        if (user.Email == CurrentUser.Email)
+        {
+            return;
+        }
+
+        user.TrangThai = !user.TrangThai;
+        Db.NguoiDungs.Update(user);
+        await Db.SaveChangesAsync();
+
+        nguoiDungs = await Db.NguoiDungs
+            .Include(u => u.VaiTro)
+            .ToListAsync();
+    }
+}

@@ -1,0 +1,20 @@
+﻿@page "/redirect"
+@inject NavigationManager Navigation
+@using SmartBookStore.Core
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        var target = CurrentUser.VaiTro switch
+        {
+            1 => "/admin/dashboard",
+            2 => "/customer/trangchu",
+            _ => "/dangnhap"
+        };
+
+        if (!Navigation.Uri.EndsWith(target, StringComparison.OrdinalIgnoreCase))
+            Navigation.NavigateTo(target, true);
+    }
+}

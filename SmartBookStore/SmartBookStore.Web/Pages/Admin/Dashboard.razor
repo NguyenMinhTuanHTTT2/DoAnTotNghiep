@@ -1,0 +1,27 @@
+﻿@page "/admin/dashboard"
+@layout AdminLayout
+@using SmartBookStore.Core
+
+<h2>Chào mừng @CurrentUser.HoTen đến trang quản trị</h2>
+
+<div class="dashboard-cards">
+    <div class="card">Tổng số người dùng: 123</div>
+    <div class="card">Tổng số sách: 456</div>
+    <div class="card">Đơn hàng hôm nay: 78</div>
+</div>
+
+<style>
+    .dashboard-cards {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .card {
+        flex: 1;
+        padding: 1rem;
+        background-color: #f2f2f2;
+        border-radius: 8px;
+        text-align: center;
+    }
+</style>

@@ -1,0 +1,29 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+@using SmartBookStore.Core
+
+@code {
+    private bool hasRedirected = false;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && !hasRedirected)
+        {
+            hasRedirected = true;
+
+            if (string.IsNullOrEmpty(CurrentUser.Email))
+            {
+                Navigation.NavigateTo("/customer/home");
+            }
+            else if (CurrentUser.VaiTro == 1)
+            {
+                Navigation.NavigateTo("/admin/home");
+            }
+            else
+            {
+                Navigation.NavigateTo("/customer/home");
+            }
+        }
+    }
+}
+

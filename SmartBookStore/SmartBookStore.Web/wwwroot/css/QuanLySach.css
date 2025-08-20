@@ -1,0 +1,132 @@
+﻿/* Hiệu ứng vào trang */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Toolbar */
+.toolbar {
+    margin: 15px 0;
+    text-align: right;
+}
+
+/* Nút chính */
+.btn-primary {
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #45a049, #3d8b40);
+        transform: translateY(-2px);
+    }
+
+/* Bảng */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+    .admin-table th, .admin-table td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .admin-table th {
+        background: #2c3e50;
+        color: white;
+        font-weight: 600;
+    }
+
+    .admin-table tbody tr:hover {
+        background: #f9f9f9;
+    }
+
+/* Cột hành động */
+.actions-col {
+    min-width: 160px;
+}
+
+/* Trạng thái */
+.status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-active {
+    background: #e1f7e6;
+    color: #2e7d32;
+}
+
+.status-inactive {
+    background: #fdecea;
+    color: #c62828;
+}
+
+/* Nút hành động */
+.btn-action {
+    border: none;
+    padding: 6px 10px;
+    margin: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.btn-warning {
+    background: #ff9800;
+    color: white;
+}
+
+    .btn-warning:hover {
+        background: #fb8c00;
+        transform: scale(1.05);
+    }
+
+.btn-danger {
+    background: #e74c3c;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background: #c0392b;
+        transform: scale(1.05);
+    }
+
+/* Dữ liệu trống */
+.empty-data {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 20px 0;
+}

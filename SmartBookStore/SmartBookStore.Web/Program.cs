@@ -1,34 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartBookStore.Data;
+using SmartBookStore.Web.Service;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Đăng ký Đăng ký DbContext
-builder.Services.AddDbContext<SmartBookStoreDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<SmartBookStoreDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+
+// AuthService
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<AuthService>());
+builder.Services.AddAuthorizationCore();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+    app.UseExceptionHandler("/Error");
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 
 app.Run();

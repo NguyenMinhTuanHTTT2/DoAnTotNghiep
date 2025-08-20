@@ -1,0 +1,39 @@
+﻿@inherits LayoutComponentBase
+
+<div class="layout">
+    <Header />
+
+    <main class="content">
+        @Body
+    </main>
+
+    <footer class="site-footer">
+        <div>FOOTER: Thông tin liên hệ</div>
+        <div>Chính sách</div>
+    </footer>
+</div>
+
+<style>
+    .layout {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #fff
+    }
+
+    .content {
+        flex: 1;
+        padding: 24px;
+        background: #fff
+    }
+
+    .site-footer {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-top: 1px solid #eee;
+        color: #555;
+        background: #fafafa
+    }
+</style>

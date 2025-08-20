@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<div class="auth-layout">
+    <main class="auth-card">
+        @Body
+    </main>
+</div>
+
+<style>
+    .auth-layout {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f4f6f9;
+    }
+
+    .auth-card {
+        width: 420px;
+        background: #fff;
+        padding: 28px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    }
+</style>

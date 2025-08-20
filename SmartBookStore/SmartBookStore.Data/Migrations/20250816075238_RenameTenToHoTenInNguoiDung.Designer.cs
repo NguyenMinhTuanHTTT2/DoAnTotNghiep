@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartBookStore.Data;
 
@@ -11,9 +12,11 @@ using SmartBookStore.Data;
 namespace SmartBookStore.Data.Migrations
 {
     [DbContext(typeof(SmartBookStoreDbContext))]
-    partial class SmartBookStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250816075238_RenameTenToHoTenInNguoiDung")]
+    partial class RenameTenToHoTenInNguoiDung
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -272,9 +275,6 @@ namespace SmartBookStore.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("TrangThai")
-                        .HasColumnType("bit");
-
                     b.HasKey("MaNguoiDung");
 
                     b.HasIndex("MaVaiTro");
@@ -286,10 +286,9 @@ namespace SmartBookStore.Data.Migrations
                         {
                             MaNguoiDung = 1,
                             Email = "admin0@gmail.com",
-                            HoTen = "nguyễn Minh Tuân",
+                            HoTen = "Quản trị viên",
                             MaVaiTro = 1,
-                            MatKhau = "123456",
-                            TrangThai = false
+                            MatKhau = "123456"
                         },
                         new
                         {
@@ -297,8 +296,7 @@ namespace SmartBookStore.Data.Migrations
                             Email = "admin1@gmail.com",
                             HoTen = "Nguyễn Văn A",
                             MaVaiTro = 2,
-                            MatKhau = "123456",
-                            TrangThai = false
+                            MatKhau = "123456"
                         });
                 });
 
