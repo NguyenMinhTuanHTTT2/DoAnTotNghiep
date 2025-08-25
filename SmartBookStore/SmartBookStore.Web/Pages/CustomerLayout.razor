@@ -1,38 +1,52 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="layout">
-    <Header />
+<div class="customer-layout">
+    <!-- Header -->
+    <HeaderCustomer />
 
-    <main class="content">
-        @Body
-    </main>
+    <!-- Main content -->
+    <div class="main-container">
+        <!-- Menu trái -->
+        <NavMenu />
 
+        <!-- Nội dung page sẽ render vào đây -->
+        <main class="content">
+            @Body
+        </main>
+    </div>
+
+    <!-- Footer -->
     <footer class="site-footer">
-        <div>&copy; 2025 SmartBookStore - Khách hàng</div>
+        <div class="footer-left">
+            <p>&copy; 2025 SmartBookStore</p>
+            <p>Email: support@smartbookstore.com | Hotline: 0123 456 789</p>
+        </div>
+        <div class="footer-links">
+            <a href="/customer/trangchu">Trang chủ</a>
+            <a href="/customer/sach">Danh mục sách</a>
+            <a href="/customer/hotro">Hỗ trợ</a>
+        </div>
     </footer>
 </div>
-
 <style>
-    .layout {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background: #fff
-    }
-
-    .content {
+    /* Container chính */
+    .main-container {
+        display: flex; /* Đặt NavMenu và Content nằm ngang */
         flex: 1;
-        padding: 24px;
-        background: #fff
+        min-height: calc(100vh - 120px); /* trừ header + footer */
     }
 
-    .site-footer {
-        margin-top: auto;
-        display: flex;
-        justify-content: space-between;
-        padding: 16px 20px;
-        border-top: 1px solid #eee;
-        color: #555;
-        background: #fafafa
+    /* Menu trái */
+    nav {
+        width: 250px; /* cố định chiều rộng */
+        flex-shrink: 0;
+    }
+
+    /* Nội dung bên phải */
+    .content {
+        flex: 1; /* chiếm toàn bộ khoảng trống còn lại */
+        padding: 20px 30px;
+        background: var(--bg);
+        overflow-y: auto;
     }
 </style>

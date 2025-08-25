@@ -1,5 +1,60 @@
-﻿<h3>KhuyenMai</h3>
+﻿@page "/customer/giohang"
+@layout CustomerLayout
+@inject GioHangService GioHangService
+@using SmartBookStore.Core.Service
+
+
+<section class="section">
+    <h3 class="section-title">🛒 Giỏ hàng của bạn</h3>
+
+    @if (!GioHangService.DanhSach.Any())
+    {
+        <p>Giỏ hàng trống. <a href="/customer/trangchu">Tiếp tục mua sắm →</a></p>
+    }
+    else
+    {
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Hình</th>
+                    <th>Tên sách</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in GioHangService.DanhSach)
+                {
+                    <tr>
+                        <td><img src="@item.HinhAnh" style="width:60px;height:80px;object-fit:cover" /></td>
+                        <td>@item.TenSach</td>
+                        <td>@item.Gia.ToString("N0") đ</td>
+                        <td>
+                            <input type="number" min="1" value="@item.SoLuong"
+                                   @onchange="(e) => CapNhat(item.MaSach, e.Value?.ToString())" />
+                        </td>
+                        <td>@item.ThanhTien.ToString("N0") đ</td>
+                        <td><button class="btn-outline" @onclick="() => GioHangService.XoaKhoiGio(item.MaSach)">Xóa</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <p><b>Tổng tiền: </b>@GioHangService.TongTien.ToString("N0") đ</p>
+            <a href="/customer/thanhtoan" class="btn-primary">Thanh toán</a>
+        </div>
+    }
+</section>
 
 @code {
-
+    void CapNhat(int maSach, string? value)
+    {
+        if (int.TryParse(value, out var soLuong))
+        {
+            GioHangService.CapNhatSoLuong(maSach, soLuong);
+        }
+    }
 }

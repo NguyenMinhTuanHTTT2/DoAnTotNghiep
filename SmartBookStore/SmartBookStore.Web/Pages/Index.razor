@@ -1,4 +1,6 @@
-﻿@page "/"
+﻿
+
+@page "/"
 @inject NavigationManager Navigation
 @using SmartBookStore.Core
 
@@ -11,17 +13,19 @@
         {
             hasRedirected = true;
 
-            if (string.IsNullOrEmpty(CurrentUser.Email))
+            if (string.IsNullOrEmpty(SmartBookStore.Core.CurrentUser.Email))
             {
-                Navigation.NavigateTo("/customer/home");
+                Navigation.NavigateTo("/home");
             }
+            // Nếu đăng nhập là Admin (VaiTro == 1) → về Admin Home
             else if (CurrentUser.VaiTro == 1)
             {
                 Navigation.NavigateTo("/admin/home");
             }
+            // Nếu đăng nhập là Customer → về Customer Home
             else
             {
-                Navigation.NavigateTo("/customer/home");
+                Navigation.NavigateTo("/customer/trangchu");
             }
         }
     }

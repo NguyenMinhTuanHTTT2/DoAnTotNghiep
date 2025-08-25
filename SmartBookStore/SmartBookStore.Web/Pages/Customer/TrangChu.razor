@@ -1,16 +1,279 @@
 ﻿@page "/customer/trangchu"
 @inject AuthService Auth
 @inject NavigationManager Navigation
+@inject GioHangService GioHangService
 @layout CustomerLayout
+@using SmartBookStore.Core.Service
+@using SmartBookStore.Core.Models
+<!-- Banner -->
+<section class="banner">
+    <div class="banner-text">
+        <h2>Khuyến mãi Tháng 8 🎉</h2>
+        <p>Giảm đến <b>50%</b> cho sách văn học & thiếu nhi. Mua 2 tặng 1 ở mục HOT DEALS.</p>
+    </div>
+</section>
 
-<h1>Chào mừng @Auth.GetCurrent()?.HoTen</h1>
+<!-- Sách nổi bật -->
+<section class="section">
+    <h3 class="section-title">🔥 Sách nổi bật</h3>
+
+    <div class="book-grid">
+        @foreach (var card in sachNoiBat)
+        {
+            <div class="book-card">
+                <span class="discount">-@card.GiamGia%</span>
+                <img src="@card.HinhAnh" alt="@card.Entity.TenSach" />
+                <h4>@card.Entity.TenSach</h4>
+                <p class="old-price">@card.GiaGoc.ToString("N0") đ</p>
+                <p class="price">@card.Entity.Gia.ToString("N0") đ</p>
+
+                <div class="actions">
+                    <button class="btn-outline" @onclick="() => XemChiTiet(card.Entity.MaSach)">Chi tiết</button>
+                    <button class="btn-primary" @onclick="() => ThemVaoGio(card)">Thêm giỏ hàng</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <a href="/customer/sach" class="see-all">Xem tất cả →</a>
+</section>
+
+<!-- Gợi ý cho bạn -->
+<section class="section">
+    <h3 class="section-title">🎯 Gợi ý cho bạn</h3>
+
+    <div class="book-grid">
+        @foreach (var card in goiY)
+        {
+            <div class="book-card">
+                @if (card.GiamGia > 0)
+                {
+                    <span class="discount">-@card.GiamGia%</span>
+                }
+                <img src="@card.HinhAnh" alt="@card.Entity.TenSach" />
+                <h4>@card.Entity.TenSach</h4>
+                @if (card.GiaGoc > card.Entity.Gia)
+                {
+                    <p class="old-price">@card.GiaGoc.ToString("N0") đ</p>
+                }
+                <p class="price">@card.Entity.Gia.ToString("N0") đ</p>
+
+                <div class="actions">
+                    <button class="btn-outline" @onclick="() => XemChiTiet(card.Entity.MaSach)">Chi tiết</button>
+                    <button class="btn-primary" @onclick="() => ThemVaoGio(card)">Thêm giỏ hàng</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <a href="/customer/sach" class="see-all">Xem thêm →</a>
+</section>
 
 @code {
+    // ViewModel gói thêm thông tin UI
+    private record SachCardVM(CartItem Entity, string HinhAnh, decimal GiaGoc, int GiamGia);
+
+    private List<SachCardVM> sachNoiBat = new();
+    private List<SachCardVM> goiY = new();
+
     protected override void OnInitialized()
     {
         if (!Auth.DaDangNhap || Auth.GetCurrent()?.VaiTro != 2)
         {
-            Navigation.NavigateTo("/home");
+            Navigation.NavigateTo("/trangchu");
+            return;
         }
+
+        // Dữ liệu demo
+        sachNoiBat = new()
+        {
+            new SachCardVM(new CartItem { MaSach=1, TenSach="Đắc Nhân Tâm (Tái bản)", Gia=120000 }, "/images/sample1.jpg", 150000, 20),
+            new SachCardVM(new CartItem { MaSach=2, TenSach="Tuổi Trẻ Đáng Giá Bao Nhiêu", Gia=84000 }, "/images/sample2.jpg", 120000, 30),
+            new SachCardVM(new CartItem { MaSach=3, TenSach="Lập Trình C# Từ A Đến Z", Gia=170000 }, "/images/sample3.jpg", 200000, 15),
+            new SachCardVM(new CartItem { MaSach=4, TenSach="Dế Mèn Phiêu Lưu Ký", Gia=81000 }, "/images/sample4.jpg", 90000, 10),
+        };
+
+        goiY = new()
+        {
+            new SachCardVM(new CartItem { MaSach=5, TenSach="Kẻ Trộm Sách", Gia=99000 }, "/images/sample5.jpg", 125000, 21),
+            new SachCardVM(new CartItem { MaSach=6, TenSach="Sapiens - Lược sử loài người", Gia=189000 }, "/images/sample6.jpg", 219000, 14),
+        };
+    }
+
+    void ThemVaoGio(SachCardVM card)
+    {
+        var item = new CartItem
+            {
+                MaSach = card.Entity.MaSach,
+                TenSach = card.Entity.TenSach,
+                Gia = card.Entity.Gia,
+                HinhAnh = card.HinhAnh,
+                SoLuong = 1
+            };
+
+        GioHangService.ThemVaoGio(item);
+    }
+
+    void XemChiTiet(int bookId)
+    {
+        Navigation.NavigateTo($"/customer/chitietsach/{bookId}");
     }
 }
+<style>
+    /* Banner */
+    .banner {
+        background: var(--primary);
+        color: #fff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .banner-text h2 {
+        font-size: 26px;
+        margin-bottom: 8px;
+    }
+
+    .banner button {
+        background: #fff;
+        color: var(--primary);
+        font-weight: bold;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .banner button:hover {
+            background: #f1f1f1;
+        }
+
+    /* Section */
+    .section {
+        margin-bottom: 40px;
+    }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* Book grid */
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .book-card {
+        position: relative;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        transition: transform 0.2s;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .book-card h4 {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #222;
+        }
+
+    .old-price {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .price {
+        color: #e53935;
+        font-weight: bold;
+        font-size: 16px;
+        margin: 5px 0 10px;
+    }
+
+    /* Discount badge */
+    .discount {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #e53935;
+        color: #fff;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 50px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Actions */
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: auto;
+        gap: 10px;
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background: #1565c0;
+        }
+
+    .btn-outline {
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .btn-outline:hover {
+            background: #f5f5f5;
+        }
+
+    /* Xem tất cả */
+    .see-all {
+        display: inline-block;
+        margin-top: 12px;
+        font-size: 14px;
+        color: purple;
+        text-decoration: none;
+        float: right;
+    }
+
+        .see-all:hover {
+            text-decoration: underline;
+        }
+</style>

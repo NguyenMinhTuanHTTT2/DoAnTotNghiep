@@ -1,42 +1,86 @@
 ﻿<aside class="nav-menu">
-    <ul>
-        <li><a href="/customer/trangchu">🏠 Trang chủ</a></li>
-        <li><a href="/books">📖 Danh mục sách</a></li>
-        <li><a href="/cart">🛒 Giỏ hàng</a></li>
-        <li><a href="/account/profile">👤 Tài khoản</a></li>
+    <ul class="menu-list">
+        <li class="menu-item">
+            <a href="/customer/trangchu" class="menu-link">
+                <span class="icon">🏠</span>
+                <span class="text">Trang chủ</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="/customer/sach" class="menu-link">
+                <span class="icon">📖</span>
+                <span class="text">Danh mục sách</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="/customer/lichsudonhang" class="menu-link">
+                <span class="icon">📦</span>
+                <span class="text">Đơn hàng</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="/customer/danhgia" class="menu-link">
+                <span class="icon">⭐</span>
+                <span class="text">Đánh giá sách</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="/HoTro" class="menu-link">
+                <span class="icon">❓</span>
+                <span class="text">Hỗ trợ</span>
+            </a>
+        </li>
     </ul>
 </aside>
 
+<link href="css/navmenu.css" rel="stylesheet" />
+
+<link href="css/NavMenu.css" rel="stylesheet" />
 <style>
+    /* Container menu */
     .nav-menu {
-        width: 220px;
-        background: #f9fbfd;
-        padding: 20px;
-        border-right: 1px solid #ddd;
+        width: 240px;
+        background: #fff;
+        padding: 20px 0;
+        border-right: 1px solid #eee;
         min-height: calc(100vh - 60px); /* trừ chiều cao header */
     }
 
-        .nav-menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+    /* Danh sách menu */
+    .menu-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Từng item */
+    .menu-item {
+        margin-bottom: 4px;
+    }
+
+    /* Link trong menu */
+    .menu-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #2c3e50;
+        font-weight: 500;
+        padding: 12px 20px;
+        border-radius: 8px;
+        transition: background 0.2s, color 0.2s;
+    }
+
+        /* Icon bên trái */
+        .menu-link .icon {
+            font-size: 18px;
+            margin-right: 12px;
         }
 
-            .nav-menu ul li {
-                margin-bottom: 15px;
-            }
+        /* Hover và Active */
+        .menu-link:hover,
+        .menu-link.active {
+            background: #eaf3ff;
+            color: #0056d2;
+        }
 
-                .nav-menu ul li a {
-                    text-decoration: none;
-                    color: #2c3e50;
-                    font-weight: 500;
-                    display: block;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                }
-
-                    .nav-menu ul li a:hover {
-                        background: #eaf3ff;
-                        color: #3498db;
-                    }
 </style>

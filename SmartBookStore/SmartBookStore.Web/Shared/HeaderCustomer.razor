@@ -1,0 +1,170 @@
+﻿<header class="header-customer">
+    <div class="header-left">
+        <a href="/customer/trangchu" class="logo">SMART BOOKSTORE</a>
+    </div>
+
+    <div class="header-center">
+        <div class="search-box">
+            <input type="text" placeholder="Tìm kiếm sách, tác giả, thể loại..." />
+            <button>Tìm</button>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <a href="/customer/giohang" class="cart">🛒 <span class="cart-count">3</span></a>
+
+        <div class="user-menu">
+            <span class="user-name">Xin chào, Nguyễn Văn A ▼</span>
+            <ul class="dropdown">
+                <li><a href="/account/profile">Thông tin cá nhân</a></li>
+                <li><a href="/account/change-password">Đổi mật khẩu</a></li>
+                <li><a href="/account/address">Địa chỉ giao hàng</a></li>
+                <li><a href="/customer/lichsudonhang">Lịch sử đơn hàng</a></li>
+                <li><a href="/logout">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<link href="css/headercustomer.css" rel="stylesheet" />
+<style>
+    :root {
+        --primary: #0056d2; /* màu nền chính */
+        --white: #fff;
+    }
+
+    /* Header */
+    .header-customer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--primary);
+        color: var(--white);
+        padding: 10px 40px;
+        height: 60px;
+    }
+
+    /* 3 phần chia tỷ lệ */
+    .header-left {
+        flex: 1;
+    }
+
+    .header-center {
+        flex: 2; /* chiếm nhiều nhất cho search */
+        display: flex;
+        justify-content: center;
+    }
+
+    .header-right {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 20px;
+    }
+
+    /* Logo */
+    .logo {
+        font-size: 20px;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--white);
+    }
+
+    /* Ô tìm kiếm */
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: var(--white);
+        border-radius: 30px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 500px;
+        height: 38px;
+    }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 0 15px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box button {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            font-weight: 600;
+            height: 100%;
+        }
+
+    /* Giỏ hàng */
+    .cart {
+        position: relative;
+        font-size: 20px;
+        color: var(--white);
+        text-decoration: none;
+    }
+
+    .cart-count {
+        position: absolute;
+        top: -6px;
+        right: -10px;
+        background: red;
+        color: var(--white);
+        font-size: 12px;
+        border-radius: 50%;
+        padding: 2px 6px;
+    }
+
+    /* User menu */
+    .user-menu {
+        position: relative;
+        cursor: pointer;
+        color: var(--white);
+        font-weight: 500;
+    }
+
+    .user-name {
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .user-menu .dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: var(--white);
+        color: #333;
+        min-width: 200px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border-radius: 6px;
+        overflow: hidden;
+        z-index: 1000;
+    }
+
+        .user-menu .dropdown li {
+            list-style: none;
+        }
+
+            .user-menu .dropdown li a {
+                display: block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #333;
+            }
+
+                .user-menu .dropdown li a:hover {
+                    background: #f1f1f1;
+                }
+
+    /* Hover mới hiện menu */
+    .user-menu:hover .dropdown {
+        display: block;
+    }
+
+</style>

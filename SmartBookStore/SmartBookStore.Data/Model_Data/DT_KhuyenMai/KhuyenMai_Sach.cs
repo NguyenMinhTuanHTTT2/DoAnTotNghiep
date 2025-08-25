@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmartBookStore.Data.Model_Data.DT_KhuyenMai
+﻿namespace SmartBookStore.Data.Model_Data.DT_KhuyenMai
 {
     public class KhuyenMai_Sach
     {

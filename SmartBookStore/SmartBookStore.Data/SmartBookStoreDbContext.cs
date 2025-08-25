@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using SmartBookStore.Data.Model_Data.DT_DonHang;
+using SmartBookStore.Data.Model_Data.DT_GioHang;
+using SmartBookStore.Data.Model_Data.DT_HoTroAI;
+using SmartBookStore.Data.Model_Data.DT_KhuyenMai;
 // Entities
 using SmartBookStore.Data.Model_Data.DT_NguoiDung;
-using SmartBookStore.Data.Model_Data.DT_GioHang;
 using SmartBookStore.Data.Model_Data.DT_Sach;
-using SmartBookStore.Data.Model_Data.DT_DonHang;
-using SmartBookStore.Data.Model_Data.DT_KhuyenMai;
-using SmartBookStore.Data.Model_Data.DT_HoTroAI;
-using static System.Net.Mime.MediaTypeNames;
 
 
 namespace SmartBookStore.Data
@@ -26,7 +24,9 @@ namespace SmartBookStore.Data
 
         public DbSet<Sach> Sachs { get; set; }
         public DbSet<TacGia> TacGias { get; set; }
+        public DbSet<DanhMuc> DanhMucs { get; set; }
         public DbSet<TheLoai> TheLoais { get; set; }
+        
         public DbSet<Sach_TacGia> Sach_TacGias { get; set; }
         public DbSet<Sach_TheLoai> Sach_TheLoais { get; set; }
 
@@ -36,7 +36,7 @@ namespace SmartBookStore.Data
         public DbSet<KhuyenMai> KhuyenMais { get; set; }
         public DbSet<KhuyenMai_Sach> KhuyenMai_Sachs { get; set; }
         public DbSet<KhuyenMai_DonHang> KhuyenMai_DonHangs { get; set; }
-
+       
         public DbSet<GoiYAI> GoiYAIs { get; set; }
         public DbSet<YeuCauHoTro> YeuCauHoTros { get; set; }
         public DbSet<PhanHoiHoTro> PhanHoiHoTros { get; set; }
@@ -120,6 +120,12 @@ namespace SmartBookStore.Data
                 .HasOne(sl => sl.TheLoai)
                 .WithMany(tl => tl.Sach_TheLoais)
                 .HasForeignKey(sl => sl.MaTheLoai)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TheLoai>()
+                .HasOne(tl => tl.DanhMuc)
+                .WithMany(dm => dm.TheLoais)
+                .HasForeignKey(tl => tl.MaDanhMuc)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // ====== KhuyenMai - Sach (N-N qua bảng nối)
@@ -225,12 +231,20 @@ namespace SmartBookStore.Data
                 }
             );
 
+            // Thêm bảng danh mục và seed bảng danh mục
+            modelBuilder.Entity<DanhMuc>().HasData(
+                new DanhMuc { MaDanhMuc = 1, TenDanhMuc = "Khoa học & Văn học" },
+                new DanhMuc { MaDanhMuc = 2, TenDanhMuc = "Công nghệ" },
+                new DanhMuc { MaDanhMuc = 3, TenDanhMuc = "Thiếu nhi" },
+                new DanhMuc { MaDanhMuc = 4, TenDanhMuc = "Truyện tranh" }
+            );
+
             // 3. Seed bảng TheLoai (các thể loại sách cơ bản)
             modelBuilder.Entity<TheLoai>().HasData(
-                new TheLoai { MaTheLoai = 1, TenTheLoai = "Khoa học" },
-                new TheLoai { MaTheLoai = 2, TenTheLoai = "Văn học" },
-                new TheLoai { MaTheLoai = 3, TenTheLoai = "Công nghệ" },
-                new TheLoai { MaTheLoai = 4, TenTheLoai = "Thiếu nhi" }
+                new TheLoai { MaTheLoai = 1, TenTheLoai = "Khoa học",MaDanhMuc= 1 },
+                new TheLoai { MaTheLoai = 2, TenTheLoai = "Văn học", MaDanhMuc = 2},
+                new TheLoai { MaTheLoai = 3, TenTheLoai = "Công nghệ", MaDanhMuc = 3 },
+                new TheLoai { MaTheLoai = 4, TenTheLoai = "Thiếu nhi", MaDanhMuc = 4 }
                 );
             // 4. Seed bảng TacGia (một số tác giả nổi tiếng)
 
@@ -259,17 +273,19 @@ namespace SmartBookStore.Data
             MoTa = "Khám phá vũ trụ qua góc nhìn vật lý của Stephen Hawking."
         },
         new Sach
-        {
+            {
             MaSach = 3,
             TenSach = "Tôi Thấy Hoa Vàng Trên Cỏ Xanh",
             Gia = 120000,
             SoLuongTon = 40,
             MoTa = "Tiểu thuyết nổi tiếng của Nguyễn Nhật Ánh."
-        }
-    );
+            });
+            
 
 
             base.OnModelCreating(modelBuilder);
         }
+
     }
+
 }

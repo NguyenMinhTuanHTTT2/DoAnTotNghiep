@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SmartBookStore.Data.Model_Data.DT_Sach
 {
@@ -16,6 +11,12 @@ namespace SmartBookStore.Data.Model_Data.DT_Sach
         [MaxLength(100)]
         public string TenTheLoai { get; set; } = string.Empty;
 
+        public int MaDanhMuc { get; set; }
+
+        // Navigation property
+        public virtual DanhMuc DanhMuc { get; set; } = null!;
         public virtual ICollection<Sach_TheLoai> Sach_TheLoais { get; set; } = new List<Sach_TheLoai>();
+        // ===== Quan hệ 1-N với DanhMuc =====
+        
     }
 }

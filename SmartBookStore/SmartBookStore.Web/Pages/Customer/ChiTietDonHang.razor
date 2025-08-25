@@ -1,0 +1,93 @@
+﻿@page "/customer/chitietdonhang/{MaDonHang:int}"
+@inject SmartBookStore.Data.SmartBookStoreDbContext Db
+@inject AuthService Auth
+@inject NavigationManager Navigation
+@layout CustomerLayout
+@using Microsoft.EntityFrameworkCore
+
+<h2 class="page-title">🛒 Chi tiết đơn hàng</h2>
+
+@if (!Auth.DaDangNhap || Auth.GetCurrent()?.VaiTro != 2)
+{
+    <p>Bạn chưa đăng nhập. Vui lòng <a href="/dangnhap">đăng nhập</a> để xem chi tiết đơn hàng.</p>
+}
+else if (DonHangDetail == null)
+{
+    <p>Đơn hàng không tồn tại hoặc bạn không có quyền xem.</p>
+}
+else
+{
+    <div class="order-detail">
+        <p><b>Mã đơn:</b> @DonHangDetail.MaDonHang</p>
+        <p><b>Ngày đặt:</b> @DonHangDetail.NgayDat.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><b>Tổng tiền:</b> @DonHangDetail.TongTien.ToString("N0") đ</p>
+
+        <h3>📦 Chi tiết sản phẩm</h3>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Tên sách</th>
+                    <th>Hình ảnh</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in DonHangDetail.ChiTietDonHangs)
+                {
+                    <tr>
+                        <td>@item.Sach.TenSach</td>
+                        <td><img src="@item.Sach.AnhBia" style="width:60px;height:80px;object-fit:cover" /></td>
+                        <td>@item.DonGia.ToString("N0") đ</td>
+                        <td>@item.SoLuong</td>
+                        <td>@(item.DonGia * item.SoLuong) đ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    [Parameter] public int MaDonHang { get; set; }
+    private DonHang? DonHangDetail;
+
+    protected override void OnInitialized()
+    {
+        if (!Auth.DaDangNhap) return;
+
+        int userId = Auth.GetCurrent()!.MaNguoiDung;
+
+        DonHangDetail = Db.DonHangs
+            .Include(d => d.ChiTietDonHangs)
+                .ThenInclude(ct => ct.Sach)
+            .FirstOrDefault(d => d.MaDonHang == MaDonHang && d.MaNguoiDung == userId);
+    }
+}
+
+<style>
+    .order-detail {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        margin-top: 20px;
+    }
+
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+        .order-table th, .order-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .order-table th {
+            background-color: #f5f5f5;
+        }
+</style>

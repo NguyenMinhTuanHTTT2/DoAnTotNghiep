@@ -1,0 +1,148 @@
+﻿@page "/customer/lichsudonhang"
+@inject SmartBookStore.Data.SmartBookStoreDbContext Db
+@inject AuthService Auth
+@inject NavigationManager Navigation
+@layout CustomerLayout
+@using SmartBookStore.Data.Model_Data.DT_NguoiDung
+@using SmartBookStore.Data.Model_Data.DT_DonHang
+@using Microsoft.EntityFrameworkCore
+
+<h2 class="page-title">📜 Lịch sử đơn hàng</h2>
+
+@if (!Auth.DaDangNhap || Auth.GetCurrent()?.VaiTro != 2)
+{
+    <p>Bạn chưa đăng nhập. Vui lòng <a href="/dangnhap">đăng nhập</a> để xem lịch sử đơn hàng.</p>
+}
+else
+{
+    @if (DonHangs.Count == 0)
+    {
+        <p>Bạn chưa có đơn hàng nào. <a href="/customer/trangchu">Tiếp tục mua sắm</a></p>
+    }
+    else
+    {
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dh in DonHangs)
+                {
+                    <tr>
+                        <td>@dh.MaDonHang</td>
+                        <td>@dh.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@dh.TongTien.ToString("N0") đ</td>
+                        <td>
+                            <span class="status @GetStatusClass(dh.TrangThai)">
+                                @dh.TrangThai
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-outline" @onclick="() => XemChiTiet(dh.MaDonHang)">Xem chi tiết</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    // Danh sách đơn hàng của khách hàng hiện tại
+    private List<DonHang> DonHangs = new();
+
+    protected override void OnInitialized()
+    {
+        if (!Auth.DaDangNhap) return;
+
+        int userId = Auth.GetCurrent()!.MaNguoiDung;
+
+        // Lấy danh sách đơn hàng của user kèm chi tiết
+        DonHangs = Db.DonHangs
+        .Where(d => d.MaNguoiDung == userId)
+        .OrderByDescending(d => d.NgayDat)
+        .ToList();
+    }
+
+    void XemChiTiet(int maDonHang)
+    {
+        Navigation.NavigateTo($"/customer/chitietdonhang/{maDonHang}");
+    }
+
+    string GetStatusClass(string trangThai)
+    {
+        return trangThai switch
+        {
+            "Chờ xử lý" => "pending",
+            "Đang giao" => "shipping",
+            "Đã giao" => "delivered",
+            "Đã hủy" => "canceled",
+            _ => "pending"
+        };
+    }
+}
+
+<style>
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+        .order-table th, .order-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .order-table th {
+            background-color: #f5f5f5;
+        }
+
+    .btn-outline {
+        padding: 6px 12px;
+        border: 1px solid #007bff;
+        color: #007bff;
+        background: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .btn-outline:hover {
+            background: #007bff;
+            color: white;
+        }
+
+    /* Trạng thái */
+    .status {
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.shipping {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status.delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.canceled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+</style>

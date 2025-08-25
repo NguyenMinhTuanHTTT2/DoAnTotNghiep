@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartBookStore.Data.Model_Data.DT_Sach
 {
@@ -33,6 +29,9 @@ namespace SmartBookStore.Data.Model_Data.DT_Sach
         public double? DiemDanhGia { get; set; } // Điểm đánh giá trung bình (1-5)
 
         public bool TrangThai { get; set; } = true;
+
+        
+
         public virtual ICollection<Sach_TacGia> Sach_TacGias { get; set; } = new List<Sach_TacGia>();
         public virtual ICollection<Sach_TheLoai> Sach_TheLoais { get; set; } = new List<Sach_TheLoai>();
         public virtual ICollection<DT_GioHang.ChiTietGioHang> ChiTietGioHangs { get; set; } = new List<DT_GioHang.ChiTietGioHang>();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartBookStore.Data;
 
@@ -11,9 +12,11 @@ using SmartBookStore.Data;
 namespace SmartBookStore.Data.Migrations
 {
     [DbContext(typeof(SmartBookStoreDbContext))]
-    partial class SmartBookStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250824133414_UpdateDonHang_AddFields")]
+    partial class UpdateDonHang_AddFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,12 +70,6 @@ namespace SmartBookStore.Data.Migrations
 
                     b.Property<DateTime>("NgayDat")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("SoDienThoai")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenNguoiNhan")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TongTien")
                         .HasColumnType("decimal(18,2)");

@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
+using SmartBookStore.Core.Service;
 using SmartBookStore.Data;
 using SmartBookStore.Web.Service;
-using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<AuthService>());
 builder.Services.AddAuthorizationCore();
+// Đăng ký service giỏ hàng
+builder.Services.AddScoped<GioHangService>();
+
 
 var app = builder.Build();
 

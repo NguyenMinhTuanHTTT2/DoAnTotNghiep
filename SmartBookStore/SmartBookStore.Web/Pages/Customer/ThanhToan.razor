@@ -1,5 +1,158 @@
-﻿<h3>CheckOut</h3>
+﻿@page "/customer/thanhtoan"
+@inject AuthService Auth
+@inject NavigationManager Navigation
+@inject GioHangService GioHangService
+@using SmartBookStore.Core.Models
+@layout CustomerLayout
+@inject SmartBookStore.Data.SmartBookStoreDbContext Db
+@using SmartBookStore.Data.Model_Data.DT_DonHang
+
+<h2>Thanh toán</h2>
+
+<div class="checkout-container">
+    <!-- Thông tin giao hàng -->
+    <div class="checkout-section">
+        <h3>Thông tin giao hàng</h3>
+        <div class="form-group">
+            <label>Họ và tên</label>
+            <input @bind="HoTen" placeholder="Nhập họ tên người nhận" />
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại</label>
+            <input @bind="SoDienThoai" placeholder="Nhập số điện thoại" />
+        </div>
+        <div class="form-group">
+            <label>Địa chỉ giao hàng</label>
+            <textarea @bind="DiaChi" placeholder="Nhập địa chỉ giao hàng"></textarea>
+        </div>
+        <button class="btn btn-primary" @onclick="DatHang">Đặt hàng</button>
+    </div>
+
+    <!-- Tóm tắt đơn hàng -->
+    <div class="checkout-section order-summary">
+        <h3>Đơn hàng của bạn</h3>
+        <ul>
+            @foreach (var item in GioHangService.DanhSach)
+            {
+                <li>
+                    <span>@item.TenSach x @item.SoLuong</span>
+                    <span>@item.ThanhTien.ToString("n0") đ</span>
+                </li>
+            }
+        </ul>
+        <hr />
+        <p><strong>Tổng tiền:</strong> @GioHangService.DanhSach.Sum(x => x.ThanhTien).ToString("n0") đ</p>
+    </div>
+</div>
 
 @code {
+    private string HoTen = "";
+    private string SoDienThoai = "";
+    private string DiaChi = "";
 
+    protected override void OnInitialized()
+    {
+        if (!Auth.DaDangNhap || Auth.GetCurrent()?.VaiTro != 2)
+        {
+            Navigation.NavigateTo("/dangnhap");
+            return;
+        }
+    }
+
+    async Task DatHang()
+    {
+        if (string.IsNullOrWhiteSpace(HoTen) || string.IsNullOrWhiteSpace(SoDienThoai) || string.IsNullOrWhiteSpace(DiaChi))
+            return;
+
+        var current = Auth.GetCurrent()!;
+        var cart = GioHangService.DanhSach;
+        if (!cart.Any()) return;
+
+        var donHang = new DonHang
+            {
+                MaNguoiDung = current.MaNguoiDung,
+                NgayDat = DateTime.Now,
+                TongTien = cart.Sum(x => x.ThanhTien),
+                TrangThai = "ChoXacNhan",
+                TenNguoiNhan = HoTen,
+                SoDienThoai = SoDienThoai,
+                DiaChiGiaoHang = DiaChi
+            };
+
+        foreach (var item in cart)
+        {
+            donHang.ChiTietDonHangs.Add(new SmartBookStore.Data.Model_Data.DT_DonHang.ChiTietDonHang
+                {
+                    MaSach = item.MaSach,
+                    SoLuong = item.SoLuong,
+                    DonGia = item.Gia
+                });
+        }
+
+        Db.DonHangs.Add(donHang);
+        await Db.SaveChangesAsync();
+
+        GioHangService.XoaGioHang();
+        Navigation.NavigateTo("/customer/lichsudonhang", forceLoad: false);
+    }
 }
+
+<style>
+    .checkout-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .checkout-section {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+        .checkout-section h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+        }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+    .order-summary ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .order-summary ul li {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+        }
+
+    .order-summary hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+</style>

@@ -42,7 +42,7 @@
         var user = await Db.NguoiDungs.FirstOrDefaultAsync(u => u.Email == email && u.MatKhau == password);
         if (user == null) { message = "Sai email hoặc mật khẩu!"; return; }
 
-        await Auth.DangNhap(user.Email, user.HoTen, user.MaVaiTro);
+        await Auth.DangNhap(user.Email, user.HoTen, user.MaVaiTro,user.MaNguoiDung);
 
         if (user.MaVaiTro == 1)
             Navigation.NavigateTo("/admin/dashboard");

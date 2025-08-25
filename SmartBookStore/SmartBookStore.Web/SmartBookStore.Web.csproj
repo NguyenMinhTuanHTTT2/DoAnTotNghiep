@@ -19,4 +19,8 @@
     <ProjectReference Include="..\SmartBookStore.Data\SmartBookStore.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\books\" />
+  </ItemGroup>
+
 </Project>
